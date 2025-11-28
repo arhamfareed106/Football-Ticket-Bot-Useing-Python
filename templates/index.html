@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-value">{{ config.accounts|length }}</div>
+        <div class="stat-label">Accounts</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ config.proxies|length }}</div>
+        <div class="stat-label">Proxies</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">
+            <span class="{{ 'status-running' if status == 'Running' else 'status-stopped' }}">{{ status }}</span>
+        </div>
+        <div class="stat-label">Bot Status</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ logs|length }}</div>
+        <div class="stat-label">Log Entries</div>
+    </div>
+</div>
+
+<div class="card">
+    <h2>Bot Control</h2>
+    <p>Current target: <strong>{{ config.target_match_url }}</strong></p>
+    <p>Refresh interval: <strong>{{ config.refresh_interval_ms }} ms</strong></p>
+    
+    <div style="margin: 1rem 0;">
+        <label>
+            <input type="checkbox" id="simulationMode" {% if simulation_mode %}checked{% endif %}> 
+            🎮 Simulation Mode (Simulated ticket detection)
+        </label>
+    </div>
+    
+    <div style="margin-top: 1rem;">
+        {% if status == "Running" %}
+            <button class="btn btn-danger" onclick="stopBot()">⏹️ Stop Bot</button>
+            <button class="btn" onclick="checkTickets()">🔍 Check Tickets Now</button>
+        {% else %}
+            <button class="btn btn-success" onclick="startBot()">▶️ Start Bot</button>
+            <button class="btn" onclick="checkTickets()">🔍 Check Tickets Now</button>
+        {% endif %}
+    </div>
+</div>
+
+<div class="card">
+    <h2>Recent Ticket Checks</h2>
+    {% if ticket_checks %}
+        {% for check in ticket_checks|reverse %}
+            <div class="ticket-check-entry" data-available="{{ 'true' if check.available else 'false' }}">
+                <strong>Check #{{ check.check_number }}</strong> 
+                <span style="float: right; font-size: 0.9em; color: #7f8c8d;">{{ check.timestamp }}</span><br>
+                <span class="{{ 'log-info' if check.available else 'log-error' }}">
+                    {{ check.message }}
+                </span>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No ticket checks performed yet. Click "Check Tickets Now" to perform a check.</p>
+    {% endif %}
+</div>
+
+<div class="card">
+    <h2>Recent Activity</h2>
+    {% if logs %}
+        {% for log in logs %}
+            <div class="log-entry">{{ log }}</div>
+        {% endfor %}
+    {% else %}
+        <p>No recent activity. Start the bot to begin monitoring.</p>
+    {% endif %}
+</div>
+
+<div class="card">
+    <h2>Quick Setup</h2>
+    <p>To configure the bot:</p>
+    <ol>
+        <li>Go to the <a href="{{ url_for('config_page') }}">Configuration</a> page</li>
+        <li>Add your account credentials</li>
+        <li>Configure proxy servers</li>
+        <li>Set your target match URL</li>
+        <li>Start the bot!</li>
+    </ol>
+</div>
+
+<script>
+    // Handle simulation mode toggle
+    document.getElementById('simulationMode').addEventListener('change', function() {
+        const enabled = this.checked;
+        
+        fetch('/api/simulation', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({enabled: enabled})
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (!data.success) {
+                alert('Error updating simulation mode: ' + data.message);
+                // Revert the checkbox state
+                this.checked = !enabled;
+            }
+        })
+        .catch(error => {
+            alert('Error updating simulation mode: ' + error);
+            // Revert the checkbox state
+            this.checked = !enabled;
+        });
+    });
+    
+    // Function to check tickets
+    function checkTickets() {
+        fetch('/api/ticket-check', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Reload the page to show updated results
+                location.reload();
+            } else {
+                alert('Error checking tickets: ' + data.message);
+            }
+        })
+        .catch(error => {
+            alert('Error checking tickets: ' + error);
+        });
+    }
+    
+    // Auto-refresh ticket checks every 5 seconds when bot is running
+    // This is handled by passing the status to JavaScript
+    const botStatus = "{{ status }}";
+    if (botStatus === "Running") {
+        setInterval(function() {
+            fetch('/api/ticket-check', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Reload the page to show updated results
+                    location.reload();
+                }
+            });
+        }, 5000);
+    }
+    
+    // Add styling for ticket check entries
+    document.addEventListener('DOMContentLoaded', function() {
+        const entries = document.querySelectorAll('.ticket-check-entry');
+        entries.forEach(function(entry) {
+            const isAvailable = entry.getAttribute('data-available') === 'true';
+            entry.style.padding = '0.75rem';
+            entry.style.borderLeft = '4px solid ' + (isAvailable ? '#27ae60' : '#e74c3c');
+            entry.style.marginBottom = '0.5rem';
+            entry.style.backgroundColor = '#f8f9fa';
+        });
+    });
+</script>
+{% endblock %}

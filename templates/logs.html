@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Activity Logs</h1>
+
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h2>Bot Activity Log</h2>
+        <button class="btn" onclick="refreshLogs()">🔄 Refresh</button>
+    </div>
+    
+    <div id="logs-container">
+        {% if logs %}
+            {% for log in logs|reverse %}
+                <div class="log-entry">{{ log }}</div>
+            {% endfor %}
+        {% else %}
+            <p>No log entries found.</p>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    // Refresh logs from server
+    function refreshLogs() {
+        fetch('/api/logs')
+        .then(response => response.json())
+        .then(data => {
+            const container = document.getElementById('logs-container');
+            if (data.logs && data.logs.length > 0) {
+                container.innerHTML = '';
+                // Reverse the logs to show newest first
+                data.logs.slice().reverse().forEach(log => {
+                    const logDiv = document.createElement('div');
+                    logDiv.className = 'log-entry';
+                    logDiv.textContent = log;
+                    container.appendChild(logDiv);
+                });
+            } else {
+                container.innerHTML = '<p>No log entries found.</p>';
+            }
+        })
+        .catch(error => {
+            console.error('Error refreshing logs:', error);
+        });
+    }
+    
+    // Auto-refresh logs every 5 seconds
+    setInterval(refreshLogs, 5000);
+</script>
+{% endblock %}

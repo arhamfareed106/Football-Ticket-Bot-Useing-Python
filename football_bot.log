@@ -1,0 +1,31 @@
+{"timestamp": "2025-11-21T15:14:48.992208", "level": "INFO", "message": "Checking ticket availability for https://ticketexchange.com/match/arsenal-vs-tottenham-2025-11-30"}
+{"timestamp": "2025-11-21T15:14:49.999983", "level": "INFO", "message": "Checking ticket availability for https://ticketexchange.com/match/arsenal-vs-tottenham-2025-11-30"}
+{"timestamp": "2025-11-21T15:14:50.001080", "level": "WARN", "message": "No adjacent pair available. Top single seats:"}
+{"timestamp": "2025-11-21T15:14:50.001985", "level": "WARN", "message": "  Block North Stand Row A Seat A15 (ticket_id: 12345)"}
+{"timestamp": "2025-11-21T15:14:50.002812", "level": "WARN", "message": "  Block North Stand Row A Seat A17 (ticket_id: 12349)"}
+{"timestamp": "2025-11-21T15:14:50.004581", "level": "WARN", "message": "  Block East Stand Row B Seat B22 (ticket_id: 12347)"}
+{"timestamp": "2025-11-21T15:14:50.006193", "level": "WARN", "message": "  Block East Stand Row B Seat B24 (ticket_id: 12350)"}
+{"timestamp": "2025-11-21T15:14:50.007737", "level": "WARN", "message": "  Block West Stand Row C Seat C10 (ticket_id: 12351)"}
+{"timestamp": "2025-11-21T15:14:51.016474", "level": "INFO", "message": "Checking ticket availability for https://ticketexchange.com/match/arsenal-vs-tottenham-2025-11-30"}
+{"timestamp": "2025-11-21T15:14:52.033577", "level": "INFO", "message": "Checking ticket availability for https://ticketexchange.com/match/arsenal-vs-tottenham-2025-11-30"}
+{"timestamp": "2025-11-21T15:14:52.035900", "level": "INFO", "message": "Pair found: Block: East Stand, Row: B, Seats: B22 & B23 (ticket_ids: 12347,12348)"}
+{"timestamp": "2025-11-21T15:14:53.043503", "level": "INFO", "message": "Checking ticket availability for https://ticketexchange.com/match/arsenal-vs-tottenham-2025-11-30"}
+{"timestamp": "2025-11-21T15:14:54.061878", "level": "INFO", "message": "Checking ticket availability for https://ticketexchange.com/match/arsenal-vs-tottenham-2025-11-30"}
+{"timestamp": "2025-11-21T15:14:55.068536", "level": "INFO", "message": "Checking ticket availability for https://ticketexchange.com/match/arsenal-vs-tottenham-2025-11-30"}
+{"timestamp": "2025-11-21T15:14:56.077676", "level": "INFO", "message": "Checking ticket availability for https://ticketexchange.com/match/arsenal-vs-tottenham-2025-11-30"}
+{"timestamp": "2025-11-21T15:14:57.093857", "level": "INFO", "message": "Checking ticket availability for https://ticketexchange.com/match/arsenal-vs-tottenham-2025-11-30"}
+{"timestamp": "2025-11-21T15:14:58.109154", "level": "INFO", "message": "Checking ticket availability for https://ticketexchange.com/match/arsenal-vs-tottenham-2025-11-30"}
+{"timestamp": "2025-11-21T15:43:15.231954", "level": "INFO", "message": "Scraping available seats from https://ticketexchange.com/match/arsenal-vs-tottenham-2025-11-30"}
+{"timestamp": "2025-11-21T15:43:15.233032", "level": "INFO", "message": "No adjacent seats available at this time"}
+{"timestamp": "2025-11-21T15:44:48.016527", "level": "INFO", "message": "Scraping available seats from https://ticketexchange.com/match/arsenal-vs-tottenham-2025-11-30"}
+{"timestamp": "2025-11-21T15:44:48.017509", "level": "INFO", "message": "Pair found: Block Block 32, Row 10, Seats 145\u2013146"}
+{"timestamp": "2025-11-21T15:44:48.023158", "level": "INFO", "message": "Attempting to purchase adjacent tickets for Arsenal vs Tottenham"}
+{"timestamp": "2025-11-21T15:44:48.024785", "level": "INFO", "message": "Selecting adjacent seats 145 & 146"}
+{"timestamp": "2025-11-21T15:44:48.025465", "level": "INFO", "message": "Adding tickets 12345 & 12346 to basket..."}
+{"timestamp": "2025-11-21T15:44:48.026278", "level": "INFO", "message": "Adding tickets 12345,12346 to basket..."}
+INFO: Basket contents verified: 2 tickets — 145,146 — total price: £75.00
+{"timestamp": "2025-11-21T15:44:48.030237", "level": "INFO", "message": "Basket confirmed with 2 tickets"}
+{"timestamp": "2025-11-21T15:44:48.031519", "level": "INFO", "message": "Proceeding to checkout with saved card..."}
+INFO: Payment method selected: Visa **** 4242 (saved on account)
+{"timestamp": "2025-11-21T15:44:48.033910", "level": "INFO", "message": "Checkout completed successfully with saved card"}
+SUCCESS: Checkout complete. Order ID: ORD-183404. Tickets delivered to account/email.

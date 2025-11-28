@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Configuration</h1>
+
+<form id="configForm" class="card">
+    <div class="form-group">
+        <label for="target_match_url">Target Match URL:</label>
+        <input type="url" id="target_match_url" name="target_match_url" 
+               value="{{ config.target_match_url }}" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="refresh_interval_ms">Refresh Interval (ms):</label>
+        <input type="number" id="refresh_interval_ms" name="refresh_interval_ms" 
+               value="{{ config.refresh_interval_ms }}" min="1000" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="max_retries">Max Retries:</label>
+        <input type="number" id="max_retries" name="max_retries" 
+               value="{{ config.max_retries }}" min="0" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="delay_between_actions_ms">Delay Between Actions (ms):</label>
+        <input type="number" id="delay_between_actions_ms" name="delay_between_actions_ms" 
+               value="{{ config.delay_between_actions_ms }}" min="0" required>
+    </div>
+    
+    <h2>Accounts</h2>
+    <div id="accounts-container">
+        {% for account in config.accounts %}
+        <div class="card account-item">
+            <div class="form-group">
+                <label>Username:</label>
+                <input type="text" name="account_username" value="{{ account.username }}" required>
+            </div>
+            <div class="form-group">
+                <label>Password:</label>
+                <input type="password" name="account_password" value="{{ account.password }}" required>
+            </div>
+            <button type="button" class="btn btn-danger" onclick="removeAccount(this)">Remove Account</button>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <button type="button" class="btn" onclick="addAccount()">➕ Add Account</button>
+    
+    <h2>Proxies</h2>
+    <div id="proxies-container">
+        {% for proxy in config.proxies %}
+        <div class="card proxy-item">
+            <div class="form-group">
+                <label>Proxy URL:</label>
+                <input type="text" name="proxy_url" value="{{ proxy }}" placeholder="http://username:password@proxy:port" required>
+            </div>
+            <button type="button" class="btn btn-danger" onclick="removeProxy(this)">Remove Proxy</button>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <button type="button" class="btn" onclick="addProxy()">➕ Add Proxy</button>
+    
+    <div style="margin-top: 1rem;">
+        <button type="submit" class="btn btn-success">💾 Save Configuration</button>
+    </div>
+</form>
+
+<script>
+    // Add a new account field
+    function addAccount() {
+        const container = document.getElementById('accounts-container');
+        const accountDiv = document.createElement('div');
+        accountDiv.className = 'card account-item';
+        accountDiv.innerHTML = `
+            <div class="form-group">
+                <label>Username:</label>
+                <input type="text" name="account_username" required>
+            </div>
+            <div class="form-group">
+                <label>Password:</label>
+                <input type="password" name="account_password" required>
+            </div>
+            <button type="button" class="btn btn-danger" onclick="removeAccount(this)">Remove Account</button>
+        `;
+        container.appendChild(accountDiv);
+    }
+    
+    // Remove an account field
+    function removeAccount(button) {
+        button.parentElement.remove();
+    }
+    
+    // Add a new proxy field
+    function addProxy() {
+        const container = document.getElementById('proxies-container');
+        const proxyDiv = document.createElement('div');
+        proxyDiv.className = 'card proxy-item';
+        proxyDiv.innerHTML = `
+            <div class="form-group">
+                <label>Proxy URL:</label>
+                <input type="text" name="proxy_url" placeholder="http://username:password@proxy:port" required>
+            </div>
+            <button type="button" class="btn btn-danger" onclick="removeProxy(this)">Remove Proxy</button>
+        `;
+        container.appendChild(proxyDiv);
+    }
+    
+    // Remove a proxy field
+    function removeProxy(button) {
+        button.parentElement.remove();
+    }
+    
+    // Handle form submission
+    document.getElementById('configForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Collect form data
+        const formData = {
+            target_match_url: document.getElementById('target_match_url').value,
+            refresh_interval_ms: parseInt(document.getElementById('refresh_interval_ms').value),
+            max_retries: parseInt(document.getElementById('max_retries').value),
+            delay_between_actions_ms: parseInt(document.getElementById('delay_between_actions_ms').value),
+            accounts: [],
+            proxies: []
+        };
+        
+        // Collect accounts
+        document.querySelectorAll('.account-item').forEach(accountDiv => {
+            const username = accountDiv.querySelector('input[name="account_username"]').value;
+            const password = accountDiv.querySelector('input[name="account_password"]').value;
+            if (username && password) {
+                formData.accounts.push({username: username, password: password});
+            }
+        });
+        
+        // Collect proxies
+        document.querySelectorAll('.proxy-item').forEach(proxyDiv => {
+            const proxyUrl = proxyDiv.querySelector('input[name="proxy_url"]').value;
+            if (proxyUrl) {
+                formData.proxies.push(proxyUrl);
+            }
+        });
+        
+        // Send data to server
+        fetch('/api/config', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Configuration saved successfully!');
+            } else {
+                alert('Error saving configuration: ' + data.message);
+            }
+        })
+        .catch(error => {
+            alert('Error saving configuration: ' + error);
+        });
+    });
+</script>
+{% endblock %}

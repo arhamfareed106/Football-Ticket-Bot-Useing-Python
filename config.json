@@ -1,0 +1,31 @@
+{
+  "target_event": {
+    "name": "Arsenal vs Tottenham",
+    "event_id": "98765",
+    "url": "https://ticketexchange.com/match/arsenal-vs-tottenham-2025-11-30"
+  },
+  "accounts": [
+    {
+      "username": "arsenal_fan@gmail.com",
+      "password": "Gunners2025!",
+      "proxy": "http://45.76.23.12:8000"
+    },
+    {
+      "username": "spurs_supporter@gmail.com",
+      "password": "ComeOnYouSpurs!",
+      "proxy": "http://52.18.99.10:8000"
+    }
+  ],
+  "proxies": [
+    "http://45.76.23.12:8000",
+    "http://52.18.99.10:8000"
+  ],
+  "refresh_interval_ms": 3000,
+  "max_retries": 3,
+  "delay_between_actions_ms": 500,
+  "retry_policy": {
+    "add_to_basket": 3,
+    "checkout": 3
+  },
+  "simulation_mode": true
+}
