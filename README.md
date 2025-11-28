@@ -6,6 +6,7 @@ An advanced automated football ticket purchasing bot with anti-detection feature
 
 Unlike typical ticket bots, this project focuses on **real-world usability** with features that mimic human behavior to avoid detection while providing comprehensive automation. Whether you're a developer looking to learn about web automation or a fan wanting to secure tickets fairly, this bot offers both power and safety through its simulation mode.
 
+
 ## 🎯 Key Features
 
 ### 🔥 Advanced Automation
@@ -266,5 +267,6 @@ The use of automated ticket purchasing bots may violate the Better Online Ticket
 - Always respect website terms of service
 - Use simulation mode for testing
 - Configure realistic delays to avoid detection
-- Monitor logs for debugging and optimization#   F o o t b a l l - T i c k e t - B o t - U s e i n g - P y t h o n  
+- Monitor logs for debugging and optimization#   F o o t b a l l - T i c k e t - B o t - U s e i n g - P y t h o n 
+ 
  
